@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
 
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(),color = Purple40) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     LoginPage(
                         modifier = Modifier.padding(8.dp),
                         onLogin = {
