@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.berksam.paparaworkshop.ui.theme.Purple40
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -96,7 +95,7 @@ fun LoginPage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    onClick = {  }
+                    onClick = { onLogin(email, password) }
                 ) {
                     Text(text = "Login")
                 }
