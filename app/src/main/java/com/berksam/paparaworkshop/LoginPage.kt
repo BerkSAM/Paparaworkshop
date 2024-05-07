@@ -35,10 +35,10 @@ import com.berksam.paparaworkshop.ui.theme.Purple40
 @Composable
 fun LoginPage(
     modifier: Modifier = Modifier,
-    onLogin: (email: String, password: String) -> Unit = {_, _ ->}
+    onLogin: (email: String, password: String) -> Unit = { _, _ -> }
 ) {
-    var email by remember { mutableStateOf("")}
-    var password by remember { mutableStateOf("")}
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(true) }
 
     Scaffold(
@@ -64,7 +64,7 @@ fun LoginPage(
                     onValueChange = {
                         email = it
                     },
-                    label = { Text("Email")},
+                    label = { Text("Email") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -77,13 +77,15 @@ fun LoginPage(
                     },
                     visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    label = { Text("Password")},
+                    label = { Text("Password") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     trailingIcon = {
                         Image(
-                            modifier = Modifier.padding(8.dp).clickable { passwordVisible = !passwordVisible  },
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clickable { passwordVisible = !passwordVisible },
                             painter = painterResource(id = R.drawable.baseline_remove_red_eye_24),
                             contentDescription = "PasswordVisibilityButton"
                         )
@@ -94,7 +96,7 @@ fun LoginPage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    onClick = { onLogin(email,password) }
+                    onClick = {  }
                 ) {
                     Text(text = "Login")
                 }
@@ -113,16 +115,14 @@ fun LoginPage(
 }
 
 
-
-
 @Preview(showBackground = true)
 @Composable
-fun LoginPagePreview(){
+fun LoginPagePreview() {
     LoginPage(
         Modifier,
         onLogin = { email, password ->
             //do
-            Log.v("LoginPage" , "Email: $email, password: $password")
+            Log.v("LoginPage", "Email: $email, password: $password")
         }
     )
 }

@@ -2,6 +2,10 @@ package com.berksam.paparaworkshop
 
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,13 +14,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,36 +37,76 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.berksam.paparaworkshop.ui.theme.Purple40
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainMessage() {
     var isTimeVisible by remember { mutableStateOf(true) }
     var messageText by remember { mutableStateOf("") }
-    val messages = remember { mutableStateListOf(
-        "Hi!",
-        "Test1",
-        "Test2."
-    ) }
+    val currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+    data class Message(val text: String, val time: String)
+
+    val messages = remember {
+        mutableStateListOf(
+            Message("Hi!", "22:45"),
+            Message("Are you here ?", "23:10"),
+            Message("Please text me ", "00:30")
+        )
+    }
+
 
     Scaffold {
+        Image(
+            painter = painterResource(id = R.drawable.bg2),
+            contentDescription = "Main Message Background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
             messages.forEach { message ->
                 Card(
-                    modifier = Modifier.padding(4.dp).width(150.dp).height(30.dp),
-                    onClick = { isTimeVisible = !isTimeVisible }
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .width(150.dp)
+                        .height(30.dp),
                 ) {
-                    Text(modifier = Modifier.padding(4.dp),text = message, color = Color.Black)
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(color = Color.DarkGray, shape = RoundedCornerShape(4.dp)),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 8.dp, top = 4.dp, bottom = 4.dp, end = 4.dp),
+                            text = message.text,
+                            color = Color.White
+                        )
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 6.dp, bottom = 4.dp),
+                            text = message.time,
+                            color = Color.LightGray,
+                            fontSize = 10.sp
+                        )
+                    }
                 }
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -72,29 +119,51 @@ fun MainMessage() {
                     ),
                     keyboardActions = KeyboardActions(onSend = {
                         if (messageText.isNotBlank()) {
-                            messages.add(messageText)
+                            messages.add(Message(messageText, currentTime))
                             messageText = ""
                         }
                     }),
-                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(16.dp))
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .weight(1f)
+                        .clip(RoundedCornerShape(16.dp)),
                 )
-                ElevatedButton(
+                IconButton(
                     onClick = {
                         if (messageText.isNotBlank()) {
-                            messages.add(messageText)
+                            messages.add(Message(messageText, currentTime))
                             messageText = ""
                         }
-                    }
+                    },
+                    modifier = Modifier
+                        .clip(
+                            CircleShape
+                        )
+                        .background(color = Color(0xFF5F5252))
+                        .size(width = 50.dp, height = 50.dp)
+
                 ) {
-                    Text(text = "Send")
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.send),
+                            contentDescription = "Send button",
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                    }
                 }
+
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun PreviewMainMessage(){
+fun PreviewMainMessage() {
     MainMessage()
 }
